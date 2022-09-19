@@ -19,6 +19,7 @@
 		<PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
 		<PackageReference Include="Ardalis.Result" Version="4.1.0" />
 		<PackageReference Include="FamilyHubs.ServiceDirectory.Shared" Version="1.1.0" />
+		<PackageReference Include="FamilyHubs.SharedKernel" Version="1.0.4" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.2" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
