@@ -10,12 +10,12 @@ using FamilyHubs.Organisation.Core;
 using FamilyHubs.Organisation.Infrastructure;
 using FamilyHubs.Organisation.Infrastructure.Services;
 using FamilyHubs.SharedKernel.Interfaces;
-using FamilyHubs.Organisation.Api;
 using FamilyHubs.Organisation.Core.Interfaces;
 using FamilyHubs.Organisation.Infrastructure.Persistence.Interceptors;
 using FamilyHubs.Organisation.Infrastructure.Persistence.Repository;
-using FamilyHubs.Organisation.Api.Endpoints;
 using FamilyHubs.Organisation.Core.Entities;
+using FamilyHubs.OrganisationApi.Api.Endpoints;
+using FamilyHubs.OrganisationApi.Api;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

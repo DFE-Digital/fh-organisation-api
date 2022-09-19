@@ -4,7 +4,7 @@ using FamilyHubs.Organisation.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace FamilyHubs.Organisation.Api.Commands.UpdateOpenReferralOrganisation;
+namespace FamilyHubs.OrganisationApi.Api.Commands.UpdateOpenReferralOrganisation;
 
 
 public class UpdateOpenReferralOrganisationCommand : IRequest<string>

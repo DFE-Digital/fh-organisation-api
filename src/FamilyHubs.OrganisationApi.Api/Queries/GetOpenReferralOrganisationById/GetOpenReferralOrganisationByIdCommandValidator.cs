@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FamilyHubs.Organisation.Api.Queries.GetOpenReferralOrganisationById;
+namespace FamilyHubs.OrganisationApi.Api.Queries.GetOpenReferralOrganisationById;
 public class GetOpenReferralOrganisationByIdCommandValidator : AbstractValidator<GetOpenReferralOrganisationByIdCommand>
 {
     public GetOpenReferralOrganisationByIdCommandValidator()

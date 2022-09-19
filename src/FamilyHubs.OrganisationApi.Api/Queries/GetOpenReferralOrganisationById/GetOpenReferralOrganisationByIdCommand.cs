@@ -6,7 +6,7 @@ using FamilyHubs.ServiceDirectory.Shared.Models.Api.OpenReferralOrganisations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace FamilyHubs.Organisation.Api.Queries.GetOpenReferralOrganisationById;
+namespace FamilyHubs.OrganisationApi.Api.Queries.GetOpenReferralOrganisationById;
 
 
 public class GetOpenReferralOrganisationByIdCommand : IRequest<OpenReferralOrganisationDto>

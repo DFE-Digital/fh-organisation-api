@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace FamilyHubs.Organisation.Api.Endpoints;
+namespace FamilyHubs.OrganisationApi.Api.Endpoints;
 
 public class MinimalGeneralEndPoints
 {

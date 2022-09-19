@@ -6,7 +6,7 @@ using FamilyHubs.Organisation.Infrastructure.Persistence.Repository;
 using FamilyHubs.ServiceDirectory.Shared.Models.Api.OpenReferralOrganisations;
 using MediatR;
 
-namespace FamilyHubs.Organisation.Api.Commands.CreateOpenReferralOrganisation;
+namespace FamilyHubs.OrganisationApi.Api.Commands.CreateOpenReferralOrganisation;
 
 public class CreateOpenReferralOrganisationCommand : IRequest<string>, ICreateOpenReferralOrganisationCommand
 {

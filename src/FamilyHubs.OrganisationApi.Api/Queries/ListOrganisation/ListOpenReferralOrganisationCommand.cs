@@ -3,7 +3,7 @@ using FamilyHubs.ServiceDirectory.Shared.Models.Api.OpenReferralOrganisations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace FamilyHubs.Organisation.Api.Queries.ListOrganisation;
+namespace FamilyHubs.OrganisationApi.Api.Queries.ListOrganisation;
 
 public class ListOpenReferralOrganisationCommand : IRequest<List<OpenReferralOrganisationDto>>
 {

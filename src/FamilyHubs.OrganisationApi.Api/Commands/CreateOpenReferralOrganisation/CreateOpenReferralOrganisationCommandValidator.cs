@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FamilyHubs.Organisation.Api.Commands.CreateOpenReferralOrganisation;
+namespace FamilyHubs.OrganisationApi.Api.Commands.CreateOpenReferralOrganisation;
 
 public class CreateOpenReferralOrganisationCommandValidator : AbstractValidator<CreateOpenReferralOrganisationCommand>
 {

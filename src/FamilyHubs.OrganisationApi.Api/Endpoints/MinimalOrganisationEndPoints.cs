@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using FamilyHubs.Organisation.Api.Commands.CreateOpenReferralOrganisation;
-using FamilyHubs.Organisation.Api.Commands.UpdateOpenReferralOrganisation;
-using FamilyHubs.Organisation.Api.Queries.GetOpenReferralOrganisationById;
-using FamilyHubs.Organisation.Api.Queries.ListOrganisation;
 using FamilyHubs.Organisation.Core.Entities;
+using FamilyHubs.OrganisationApi.Api.Commands.CreateOpenReferralOrganisation;
+using FamilyHubs.OrganisationApi.Api.Commands.UpdateOpenReferralOrganisation;
+using FamilyHubs.OrganisationApi.Api.Queries.GetOpenReferralOrganisationById;
+using FamilyHubs.OrganisationApi.Api.Queries.ListOrganisation;
 using FamilyHubs.ServiceDirectory.Shared.Models.Api.OpenReferralOrganisations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace FamilyHubs.Organisation.Api.Endpoints;
+namespace FamilyHubs.OrganisationApi.Api.Endpoints;
 
 public class MinimalOrganisationEndPoints
 {

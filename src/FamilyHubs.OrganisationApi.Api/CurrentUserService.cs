@@ -1,7 +1,7 @@
 ﻿using FamilyHubs.Organisation.Core.Interfaces;
 using System.Security.Claims;
 
-namespace FamilyHubs.Organisation.Api;
+namespace FamilyHubs.OrganisationApi.Api;
 
 public class CurrentUserService : ICurrentUserService
 {
