@@ -5,7 +5,11 @@ namespace FamilyHubs.Organisation.Core.Interfaces.Infrastructure.Persistence
 {
     public interface IApplicationDbContext
     {
-        DbSet<OpenReferralOrganisation> OpenReferralOrganisations { get; }
+        DbSet<OpenReferralOrganisationEx> OpenReferralOrganisations { get; }
+        DbSet<OrganisationTypeEx> OrganisationTypes { get; }
+        DbSet<RoleEx> Roles { get; }
+        DbSet<UserTypeEx> UserTypes { get; }
+        DbSet<UserEx> Users { get; }
 
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

@@ -4,6 +4,6 @@ namespace FamilyHubs.Organisation.Core.Interfaces.Events
 {
     public interface IOpenReferralOrganisationCreatedEvent
     {
-        OpenReferralOrganisation Item { get; }
+        OpenReferralOrganisationEx Item { get; }
     }
 }

@@ -37,7 +37,11 @@ namespace FamilyHubs.Organisation.Infrastructure.Persistence.Repository
             optionsBuilder.AddInterceptors(_entitySaveChangesInterceptor);
         }
 
-        public DbSet<OpenReferralOrganisation> OpenReferralOrganisations => Set<OpenReferralOrganisation>();
+        public DbSet<OpenReferralOrganisationEx> OpenReferralOrganisations => Set<OpenReferralOrganisationEx>();
+        public DbSet<OrganisationTypeEx> OrganisationTypes => Set<OrganisationTypeEx>();
+        public DbSet<RoleEx> Roles => Set<RoleEx>();
+        public DbSet<UserTypeEx> UserTypes => Set<UserTypeEx>();
+        public DbSet<UserEx> Users => Set<UserEx>();
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

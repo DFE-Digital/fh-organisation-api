@@ -35,7 +35,7 @@ public class CreateOpenReferralOrganisationCommandHandler : IRequestHandler<Crea
     {
         try
         {
-            var entity = _mapper.Map<OpenReferralOrganisation>(request.OpenReferralOrganisation);
+            var entity = _mapper.Map<OpenReferralOrganisationEx>(request.OpenReferralOrganisation);
 #pragma warning disable S3236 // Caller information arguments should not be provided explicitly
             ArgumentNullException.ThrowIfNull(entity, nameof(entity));
 #pragma warning restore S3236 // Caller information arguments should not be provided explicitly

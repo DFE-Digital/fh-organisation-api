@@ -62,7 +62,12 @@ public class ApplicationDbContextInitialiser
 
         var openReferralOrganisationSeedData = new OpenReferralOrganisationSeedData();
 
-        IReadOnlyCollection<OpenReferralOrganisation> openReferralOrganisations = openReferralOrganisationSeedData.SeedOpenReferralOrganistions();
+        _context.Roles.AddRange(OpenReferralOrganisationSeedData.SeedRole());
+        _context.UserTypes.AddRange(OpenReferralOrganisationSeedData.SeedUserType());
+        _context.OrganisationTypes.AddRange(OpenReferralOrganisationSeedData.SeedOrgansisationType());
+        await _context.SaveChangesAsync();
+
+        IReadOnlyCollection<OpenReferralOrganisationEx> openReferralOrganisations = openReferralOrganisationSeedData.SeedOpenReferralOrganistions();
 
         foreach (var openReferralOrganisation in openReferralOrganisations)
         {

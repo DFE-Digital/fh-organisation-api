@@ -6,10 +6,10 @@ namespace FamilyHubs.Organisation.Core.Events;
 
 public class OpenReferralOrganisationCreatedEvent : DomainEventBase, IOpenReferralOrganisationCreatedEvent
 {
-    public OpenReferralOrganisationCreatedEvent(OpenReferralOrganisation item)
+    public OpenReferralOrganisationCreatedEvent(OpenReferralOrganisationEx item)
     {
         Item = item;
     }
 
-    public OpenReferralOrganisation Item { get; }
+    public OpenReferralOrganisationEx Item { get; }
 }
