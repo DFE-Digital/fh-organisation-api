@@ -42,6 +42,7 @@ namespace FamilyHubs.Organisation.Infrastructure.Persistence.Repository
         public DbSet<RoleEx> Roles => Set<RoleEx>();
         public DbSet<UserTypeEx> UserTypes => Set<UserTypeEx>();
         public DbSet<UserEx> Users => Set<UserEx>();
+        public DbSet<UserOrganisationEx> UserOrganisations => Set<UserOrganisationEx>();
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

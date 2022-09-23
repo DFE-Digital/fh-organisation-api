@@ -10,7 +10,7 @@ namespace FamilyHubs.Organisation.Core.Interfaces.Infrastructure.Persistence
         DbSet<RoleEx> Roles { get; }
         DbSet<UserTypeEx> UserTypes { get; }
         DbSet<UserEx> Users { get; }
-
+        DbSet<UserOrganisationEx> UserOrganisations { get; }
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

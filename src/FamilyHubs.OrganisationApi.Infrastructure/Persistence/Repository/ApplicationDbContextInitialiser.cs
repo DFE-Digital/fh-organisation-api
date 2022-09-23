@@ -67,12 +67,20 @@ public class ApplicationDbContextInitialiser
         _context.OrganisationTypes.AddRange(OpenReferralOrganisationSeedData.SeedOrgansisationType());
         await _context.SaveChangesAsync();
 
-        IReadOnlyCollection<OpenReferralOrganisationEx> openReferralOrganisations = openReferralOrganisationSeedData.SeedOpenReferralOrganistions();
+        IReadOnlyCollection<OpenReferralOrganisationEx> openReferralOrganisations = openReferralOrganisationSeedData.SeedOpenReferralOrganistions(_context.OrganisationTypes.ToList());
 
         foreach (var openReferralOrganisation in openReferralOrganisations)
         {
             _context.OpenReferralOrganisations.Add(openReferralOrganisation);
         }
+
+        await _context.SaveChangesAsync();
+
+        _context.Users.AddRange(openReferralOrganisationSeedData.SeedUsers(_context.UserTypes.ToList()));
+
+        await _context.SaveChangesAsync();
+
+        _context.UserOrganisations.AddRange(openReferralOrganisationSeedData.SeedUserOrganisations(_context.OpenReferralOrganisations.ToList()));
 
         await _context.SaveChangesAsync();
 
