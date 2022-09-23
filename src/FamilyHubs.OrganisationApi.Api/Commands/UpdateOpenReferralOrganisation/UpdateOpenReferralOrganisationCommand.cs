@@ -39,7 +39,9 @@ public class UpdateOpenReferralOrganisationCommandHandler : IRequestHandler<Upda
         ArgumentNullException.ThrowIfNull(request, nameof(request));
         ArgumentNullException.ThrowIfNull(request.OpenReferralOrganisation, nameof(OpenReferralOrganisation));
 
-        var entity = await _context.OpenReferralOrganisations.FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken: cancellationToken);
+        var entity = await _context.OpenReferralOrganisations
+                            .Include(x => x.OrganisationTypeEx)
+                            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken: cancellationToken);
 
         if (entity == null)
         {

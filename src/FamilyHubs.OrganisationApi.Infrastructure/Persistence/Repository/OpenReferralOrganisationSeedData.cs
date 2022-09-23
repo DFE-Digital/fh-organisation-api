@@ -123,7 +123,7 @@ public class OpenReferralOrganisationSeedData
             ),
 
             new OpenReferralOrganisationEx(
-            "1817efcc-b8cf-494e-8a9d-450d67bf1674",
+            "d9da4ce2-69b1-41ea-a535-fcda65dec44e",
             "Citizens Advice Bureau",
             "Citizens Advice Bureau",
             null,

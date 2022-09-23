@@ -177,10 +177,8 @@ static void ConfigureWebApplication(WebApplication webApplication)
     webApplication.MapControllers();
 }
 
-
-#pragma warning disable S1118 // Utility classes should not have public constructors
 public partial class Program { }
-#pragma warning restore S1118 // Utility classes should not have public constructors
+
 
 
 

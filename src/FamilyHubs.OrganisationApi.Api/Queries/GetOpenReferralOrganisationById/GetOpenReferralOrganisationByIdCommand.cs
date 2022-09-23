@@ -27,6 +27,7 @@ public class GetOpenReferralOrganisationByIdHandler : IRequestHandler<GetOpenRef
     public async Task<OpenReferralOrganisationExDto> Handle(GetOpenReferralOrganisationByIdCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.OpenReferralOrganisations
+           .Include(x => x.OrganisationTypeEx)
            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken: cancellationToken);
 
         if (entity == null)
