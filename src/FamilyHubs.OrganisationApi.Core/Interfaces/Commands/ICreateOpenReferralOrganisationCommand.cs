@@ -1,9 +1,10 @@
-﻿using FamilyHubs.ServiceDirectory.Shared.Models.Api.OpenReferralOrganisations;
+﻿using FamilyHubs.Organisation.Core.Dto;
 
 namespace FamilyHubs.Organisation.Core.Interfaces.Commands
 {
     public interface ICreateOpenReferralOrganisationCommand
     {
-        OpenReferralOrganisationDto OpenReferralOrganisation { get; init; }
+        OpenReferralOrganisationExDto OpenReferralOrganisation { get; init; }
+
     }
 }

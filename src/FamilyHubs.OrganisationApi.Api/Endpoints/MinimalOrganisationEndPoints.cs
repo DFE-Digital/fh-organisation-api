@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using FamilyHubs.Organisation.Core.Entities;
+﻿using FamilyHubs.Organisation.Core.Dto;
 using FamilyHubs.OrganisationApi.Api.Commands.CreateOpenReferralOrganisation;
 using FamilyHubs.OrganisationApi.Api.Commands.UpdateOpenReferralOrganisation;
 using FamilyHubs.OrganisationApi.Api.Queries.GetOpenReferralOrganisationById;
 using FamilyHubs.OrganisationApi.Api.Queries.ListOrganisation;
-using FamilyHubs.ServiceDirectory.Shared.Models.Api.OpenReferralOrganisations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,7 +13,7 @@ public class MinimalOrganisationEndPoints
 {
     public void RegisterOrganisationEndPoints(WebApplication app)
     {
-        app.MapPost("api/organizations", async ([FromBody] OpenReferralOrganisationDto request, CancellationToken cancellationToken, ISender _mediator, ILogger<MinimalOrganisationEndPoints> logger) =>
+        app.MapPost("api/organizations", async ([FromBody] OpenReferralOrganisationExDto request, CancellationToken cancellationToken, ISender _mediator, ILogger<MinimalOrganisationEndPoints> logger) =>
         {
             try
             {
@@ -66,12 +64,11 @@ public class MinimalOrganisationEndPoints
             }
         }).WithMetadata(new SwaggerOperationAttribute("List Organisations", "List Organisations") { Tags = new[] { "Organisations" } });
 
-        app.MapPut("api/organizations/{id}", async (string id, [FromBody] OpenReferralOrganisationWithServicesDto request, CancellationToken cancellationToken, ISender _mediator, IMapper mapper, ILogger<MinimalOrganisationEndPoints> logger) =>
+        app.MapPut("api/organizations/{id}", async (string id, [FromBody] OpenReferralOrganisationExDto request, CancellationToken cancellationToken, ISender _mediator, ILogger<MinimalOrganisationEndPoints> logger) =>
         {
             try
             {
-                OpenReferralOrganisation openReferralOrganisation = mapper.Map<OpenReferralOrganisation>(request);
-                UpdateOpenReferralOrganisationCommand command = new(id, openReferralOrganisation);
+                UpdateOpenReferralOrganisationCommand command = new(id, request);
                 var result = await _mediator.Send(command, cancellationToken);
                 return result;
             }

@@ -1,4 +1,6 @@
 ﻿using Ardalis.GuardClauses;
+using AutoMapper;
+using FamilyHubs.Organisation.Core.Dto;
 using FamilyHubs.Organisation.Core.Entities;
 using FamilyHubs.Organisation.Infrastructure.Persistence.Repository;
 using MediatR;
@@ -9,13 +11,13 @@ namespace FamilyHubs.OrganisationApi.Api.Commands.UpdateOpenReferralOrganisation
 
 public class UpdateOpenReferralOrganisationCommand : IRequest<string>
 {
-    public UpdateOpenReferralOrganisationCommand(string id, OpenReferralOrganisation openReferralOrganisation)
+    public UpdateOpenReferralOrganisationCommand(string id, OpenReferralOrganisationExDto openReferralOrganisation)
     {
         Id = id;
         OpenReferralOrganisation = openReferralOrganisation;
     }
 
-    public OpenReferralOrganisation OpenReferralOrganisation { get; init; }
+    public OpenReferralOrganisationExDto OpenReferralOrganisation { get; init; }
 
     public string Id { get; set; }
 }
@@ -33,9 +35,9 @@ public class UpdateOpenReferralOrganisationCommandHandler : IRequestHandler<Upda
 
     public async Task<string> Handle(UpdateOpenReferralOrganisationCommand request, CancellationToken cancellationToken)
     {
-#pragma warning disable S3236 // Caller information arguments should not be provided explicitly
+
         ArgumentNullException.ThrowIfNull(request, nameof(request));
-#pragma warning restore S3236 // Caller information arguments should not be provided explicitly
+        ArgumentNullException.ThrowIfNull(request.OpenReferralOrganisation, nameof(OpenReferralOrganisation));
 
         var entity = await _context.OpenReferralOrganisations.FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken: cancellationToken);
 
@@ -44,9 +46,27 @@ public class UpdateOpenReferralOrganisationCommandHandler : IRequestHandler<Upda
             throw new NotFoundException(nameof(OpenReferralOrganisation), request.Id);
         }
 
+        
+
         try
         {
-            entity.Update(request.OpenReferralOrganisation);
+            if (entity.OrganisationTypeEx.Id != request.OpenReferralOrganisation.OrganisationTypeId)
+            {
+                var organisationType = _context.OrganisationTypes.FirstOrDefault(x => x.Id == request.OpenReferralOrganisation.OrganisationTypeId);
+                ArgumentNullException.ThrowIfNull(organisationType, nameof(organisationType));
+                entity.OrganisationTypeEx = organisationType;
+            }
+
+            entity.Name = request.OpenReferralOrganisation.Name ?? string.Empty;
+            entity.Description = request.OpenReferralOrganisation.Description;
+            entity.Logo = request.OpenReferralOrganisation.Logo;
+            entity.Uri = request.OpenReferralOrganisation.Uri;
+            entity.Url = request.OpenReferralOrganisation.Url;
+            entity.Email = request.OpenReferralOrganisation.Email;
+            entity.ContactName = request.OpenReferralOrganisation.ContactName;
+            entity.ContactPhone = request.OpenReferralOrganisation.ContactPhone;
+            
+            entity.Update(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
         }

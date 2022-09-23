@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
+using FamilyHubs.Organisation.Core.Dto;
 using FamilyHubs.Organisation.Core.Entities;
 using FamilyHubs.Organisation.Core.Events;
 using FamilyHubs.Organisation.Core.Interfaces.Commands;
 using FamilyHubs.Organisation.Infrastructure.Persistence.Repository;
-using FamilyHubs.ServiceDirectory.Shared.Models.Api.OpenReferralOrganisations;
 using MediatR;
 
 namespace FamilyHubs.OrganisationApi.Api.Commands.CreateOpenReferralOrganisation;
 
 public class CreateOpenReferralOrganisationCommand : IRequest<string>, ICreateOpenReferralOrganisationCommand
 {
-    public CreateOpenReferralOrganisationCommand(OpenReferralOrganisationDto openReferralOrganisation)
+    public CreateOpenReferralOrganisationCommand(OpenReferralOrganisationExDto openReferralOrganisation)
     {
         OpenReferralOrganisation = openReferralOrganisation;
     }
 
-    public OpenReferralOrganisationDto OpenReferralOrganisation { get; init; }
+    public OpenReferralOrganisationExDto OpenReferralOrganisation { get; init; }
 }
 
 public class CreateOpenReferralOrganisationCommandHandler : IRequestHandler<CreateOpenReferralOrganisationCommand, string>
@@ -35,10 +35,11 @@ public class CreateOpenReferralOrganisationCommandHandler : IRequestHandler<Crea
     {
         try
         {
+            var organisationType = _context.OrganisationTypes.FirstOrDefault(x => x.Id == request.OpenReferralOrganisation.OrganisationTypeId);
+            ArgumentNullException.ThrowIfNull(organisationType, nameof(organisationType));
             var entity = _mapper.Map<OpenReferralOrganisationEx>(request.OpenReferralOrganisation);
-#pragma warning disable S3236 // Caller information arguments should not be provided explicitly
             ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-#pragma warning restore S3236 // Caller information arguments should not be provided explicitly
+            entity.OrganisationTypeEx = organisationType;
 
             entity.RegisterDomainEvent(new OpenReferralOrganisationCreatedEvent(entity));
 
@@ -49,9 +50,7 @@ public class CreateOpenReferralOrganisationCommandHandler : IRequestHandler<Crea
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred creating organisation. {exceptionMessage}", ex.Message);
-#pragma warning disable S112 // General exceptions should never be thrown
             throw new Exception(ex.Message, ex);
-#pragma warning restore S112 // General exceptions should never be thrown
         }
 
         if (request is not null && request.OpenReferralOrganisation is not null)

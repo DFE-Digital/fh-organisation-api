@@ -21,6 +21,12 @@ public class UpdateOpenReferralOrganisationCommandValidator : AbstractValidator<
             .NotNull()
             .NotEmpty();
 
+        RuleFor(v => v.OpenReferralOrganisation.OrganisationTypeId)
+            .MinimumLength(1)
+            .MaximumLength(50)
+            .NotNull()
+            .NotEmpty();
+
         RuleFor(v => v.OpenReferralOrganisation.Name)
             .MinimumLength(1)
             .MaximumLength(50)
