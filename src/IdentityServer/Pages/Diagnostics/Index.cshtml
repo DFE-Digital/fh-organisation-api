@@ -14,11 +14,15 @@
                 </div>
                 <div class="card-body">
                     <dl>
-                        @foreach (var claim in Model.View.AuthenticateResult.Principal.Claims)
+                        @if(Model != null && Model.View != null && Model.View.AuthenticateResult != null && Model.View.AuthenticateResult.Principal != null && Model.View.AuthenticateResult.Principal.Claims != null)
                         {
-                            <dt>@claim.Type</dt>
-                            <dd>@claim.Value</dd>
+                            @foreach (var claim in Model.View.AuthenticateResult.Principal.Claims)
+                            {
+                                <dt>@claim.Type</dt>
+                                <dd>@claim.Value</dd>
+                            }    
                         }
+                        
                     </dl>
                 </div>
             </div>
@@ -31,12 +35,16 @@
                 </div>
                 <div class="card-body">
                     <dl>
-                        @foreach (var prop in Model.View.AuthenticateResult.Properties.Items)
+                        @if(Model != null && Model.View != null && Model.View.AuthenticateResult != null && Model.View.AuthenticateResult.Properties != null)
                         {
-                            <dt>@prop.Key</dt>
-                            <dd>@prop.Value</dd>
+                            @foreach (var prop in Model.View.AuthenticateResult.Properties.Items)
+                            {
+                                <dt>@prop.Key</dt>
+                                <dd>@prop.Value</dd>
+                            }    
                         }
-                        @if (Model.View.Clients.Any())
+                        
+                        @if (Model != null && Model.View != null && Model.View.Clients.Any())
                         {
                             <dt>Clients</dt>
                             <dd>
