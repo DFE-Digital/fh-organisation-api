@@ -88,13 +88,13 @@ internal static class HostingExtensions
 
     private static void InitializeDatabase(IApplicationBuilder app)
     {
-        using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+        using (var serviceScope = app?.ApplicationServices?.GetService<IServiceScopeFactory>()?.CreateScope())
         {
-            serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+            serviceScope?.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
-            var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            context.Database.Migrate();
-            if (!context.Clients.Any())
+            var context = serviceScope?.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+            context?.Database.Migrate();
+            if (context != null && !context.Clients.Any())
             {
                 foreach (var client in Config.Clients)
                 {
@@ -103,7 +103,7 @@ internal static class HostingExtensions
                 context.SaveChanges();
             }
 
-            if (!context.IdentityResources.Any())
+            if (context != null && !context.IdentityResources.Any())
             {
                 foreach (var resource in Config.IdentityResources)
                 {
@@ -112,7 +112,7 @@ internal static class HostingExtensions
                 context.SaveChanges();
             }
 
-            if (!context.ApiScopes.Any())
+            if (context != null && !context.ApiScopes.Any())
             {
                 foreach (var resource in Config.ApiScopes)
                 {

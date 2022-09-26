@@ -8,8 +8,8 @@ namespace FamilyHubs.IdentityServerHost.Pages.Ciba;
 
 public class InputModel
 {
-    public string Button { get; set; }
-    public IEnumerable<string> ScopesConsented { get; set; }
-    public string Id { get; set; }
-    public string Description { get; set; }
+    public string Button { get; set; } = default!;
+    public IEnumerable<string> ScopesConsented { get; set; } = default!;
+    public string Id { get; set; } = default!;
+    public string Description { get; set; } = default!;
 }

@@ -17,8 +17,8 @@ public class Index : PageModel
     private readonly IIdentityServerInteractionService _interaction;
     private readonly IEventService _events;
 
-    [BindProperty] 
-    public string LogoutId { get; set; }
+    [BindProperty]
+    public string LogoutId { get; set; } = default!;
 
     public Index(IIdentityServerInteractionService interaction, IEventService events)
     {
@@ -32,7 +32,7 @@ public class Index : PageModel
 
         var showLogoutPrompt = LogoutOptions.ShowLogoutPrompt;
 
-        if (User?.Identity.IsAuthenticated != true)
+        if (User?.Identity?.IsAuthenticated != true)
         {
             // if the user is not authenticated, then just show logged out page
             showLogoutPrompt = false;
@@ -59,7 +59,7 @@ public class Index : PageModel
 
     public async Task<IActionResult> OnPost()
     {
-        if (User?.Identity.IsAuthenticated == true)
+        if (User?.Identity?.IsAuthenticated == true)
         {
             // if there's no current logout context, we need to create one
             // this captures necessary info from the current logged in user
@@ -84,7 +84,7 @@ public class Index : PageModel
                     // build a return URL so the upstream provider will redirect back
                     // to us after the user has logged out. this allows us to then
                     // complete our single sign-out processing.
-                    string url = Url.Page("/Account/Logout/Loggedout", new { logoutId = LogoutId });
+                    string? url = Url.Page("/Account/Logout/Loggedout", new { logoutId = LogoutId });
 
                     // this triggers a redirect to the external provider for sign-out
                     return SignOut(new AuthenticationProperties { RedirectUri = url }, idp);

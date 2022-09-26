@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
@@ -11,7 +7,6 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace FamilyHubs.IdentityServerHost.Pages.Consent;
 
@@ -33,10 +28,10 @@ public class Index : PageModel
         _logger = logger;
     }
 
-    public ViewModel View { get; set; }
-        
+    public ViewModel? View { get; set; } = default!;
+
     [BindProperty]
-    public InputModel Input { get; set; }
+    public InputModel Input { get; set; } = default!;
 
     public async Task<IActionResult> OnGet(string returnUrl)
     {
@@ -60,10 +55,10 @@ public class Index : PageModel
         var request = await _interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
         if (request == null) return RedirectToPage("/Error/Index");
 
-        ConsentResponse grantedConsent = null;
+        ConsentResponse? grantedConsent = null;
 
         // user clicked 'no' - send back the standard 'access_denied' response
-        if (Input?.Button == "no")
+        if (Input != null && Input?.Button == "no")
         {
             grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
 
@@ -71,7 +66,7 @@ public class Index : PageModel
             await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
         }
         // user clicked 'yes' - validate the data
-        else if (Input?.Button == "yes")
+        else if (Input != null && Input?.Button == "yes")
         {
             // if the user consented to some scope, build the response model
             if (Input.ScopesConsented != null && Input.ScopesConsented.Any())
@@ -102,7 +97,7 @@ public class Index : PageModel
             ModelState.AddModelError("", ConsentOptions.InvalidSelectionErrorMessage);
         }
 
-        if (grantedConsent != null)
+        if (Input != null && grantedConsent != null)
         {
             // communicate outcome of consent back to identityserver
             await _interaction.GrantConsentAsync(request, grantedConsent);
@@ -119,11 +114,12 @@ public class Index : PageModel
         }
 
         // we need to redisplay the consent UI
-        View = await BuildViewModelAsync(Input.ReturnUrl, Input);
+        if (Input != null)
+            View = await BuildViewModelAsync(Input.ReturnUrl, Input) ?? null;
         return Page();
     }
 
-    private async Task<ViewModel> BuildViewModelAsync(string returnUrl, InputModel model = null)
+    private async Task<ViewModel?> BuildViewModelAsync(string returnUrl, InputModel? model = null)
     {
         var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
         if (request != null)
@@ -138,7 +134,7 @@ public class Index : PageModel
     }
 
     private ViewModel CreateConsentViewModel(
-        InputModel model, string returnUrl,
+        InputModel? model, string returnUrl,
         AuthorizationRequest request)
     {
         var vm = new ViewModel

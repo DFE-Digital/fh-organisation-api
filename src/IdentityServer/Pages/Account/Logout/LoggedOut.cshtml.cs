@@ -12,7 +12,7 @@ public class LoggedOut : PageModel
 {
     private readonly IIdentityServerInteractionService _interactionService;
         
-    public LoggedOutViewModel View { get; set; }
+    public LoggedOutViewModel View { get; set; } = default!;
 
     public LoggedOut(IIdentityServerInteractionService interactionService)
     {
@@ -24,12 +24,14 @@ public class LoggedOut : PageModel
         // get context information (client name, post logout redirect URI and iframe for federated signout)
         var logout = await _interactionService.GetLogoutContextAsync(logoutId);
 
+#pragma warning disable CS8601 // Possible null reference assignment.
         View = new LoggedOutViewModel
         {
             AutomaticRedirectAfterSignOut = LogoutOptions.AutomaticRedirectAfterSignOut,
             PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
-            ClientName = String.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
+            ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
             SignOutIframeUrl = logout?.SignOutIFrameUrl
         };
+#pragma warning restore CS8601 // Possible null reference assignment.
     }
 }

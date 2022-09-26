@@ -17,12 +17,12 @@ namespace FamilyHubs.IdentityServerHost.Pages.Ciba;
 [Authorize]
 public class AllModel : PageModel
 {
-    public IEnumerable<BackchannelUserLoginRequest> Logins { get; set; }
+    public IEnumerable<BackchannelUserLoginRequest> Logins { get; set; } = default!;
 
     [BindProperty, Required]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     [BindProperty, Required]
-    public string Button { get; set; }
+    public string Button { get; set; } = default!;
 
     private readonly IBackchannelAuthenticationInteractionService _backchannelAuthenticationInteraction;
 

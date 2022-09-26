@@ -1,9 +1,6 @@
-using System.Threading.Tasks;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Hosting;
 
 namespace FamilyHubs.IdentityServerHost.Pages.Error;
 
@@ -14,8 +11,8 @@ public class Index : PageModel
     private readonly IIdentityServerInteractionService _interaction;
     private readonly IWebHostEnvironment _environment;
         
-    public ViewModel View { get; set; }
-        
+    public ViewModel View { get; set; } = default!;
+
     public Index(IIdentityServerInteractionService interaction, IWebHostEnvironment environment)
     {
         _interaction = interaction;

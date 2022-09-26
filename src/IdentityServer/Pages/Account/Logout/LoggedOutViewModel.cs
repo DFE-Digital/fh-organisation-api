@@ -7,8 +7,8 @@ namespace FamilyHubs.IdentityServerHost.Pages.Logout;
 
 public class LoggedOutViewModel
 {
-    public string PostLogoutRedirectUri { get; set; }
-    public string ClientName { get; set; }
-    public string SignOutIframeUrl { get; set; }
+    public string PostLogoutRedirectUri { get; set; } = default!;
+    public string ClientName { get; set; } = default!;
+    public string SignOutIframeUrl { get; set; } = default!;
     public bool AutomaticRedirectAfterSignOut { get; set; }
 }

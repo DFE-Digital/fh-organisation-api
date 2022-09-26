@@ -32,10 +32,10 @@ public class Consent : PageModel
         _logger = logger;
     }
 
-    public ViewModel View { get; set; }
+    public ViewModel? View { get; set; } = default!;
         
     [BindProperty]
-    public InputModel Input { get; set; }
+    public InputModel? Input { get; set; } = default!;
 
     public async Task<IActionResult> OnGet(string id)
     {
@@ -55,6 +55,9 @@ public class Consent : PageModel
 
     public async Task<IActionResult> OnPost()
     {
+        if (Input == null)
+            return Page();
+
         // validate return url is still valid
         var request = await _interaction.GetLoginRequestByInternalIdAsync(Input.Id);
         if (request == null || request.Subject.GetSubjectId() != User.GetSubjectId())
@@ -63,10 +66,10 @@ public class Consent : PageModel
             return RedirectToPage("/Home/Error/Index");
         }
 
-        CompleteBackchannelLoginRequest result = null;
+        CompleteBackchannelLoginRequest? result = null;
 
         // user clicked 'no' - send back the standard 'access_denied' response
-        if (Input?.Button == "no")
+        if (Input != null && Input?.Button == "no")
         {
             result = new CompleteBackchannelLoginRequest(Input.Id);
 
@@ -74,7 +77,7 @@ public class Consent : PageModel
             await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
         }
         // user clicked 'yes' - validate the data
-        else if (Input?.Button == "yes")
+        else if (Input != null && Input?.Button == "yes")
         {
             // if the user consented to some scope, build the response model
             if (Input.ScopesConsented != null && Input.ScopesConsented.Any())
@@ -113,16 +116,18 @@ public class Consent : PageModel
         }
 
         // we need to redisplay the consent UI
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         View = await BuildViewModelAsync(Input.Id, Input);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         return Page();
     }
 
-    private async Task<ViewModel> BuildViewModelAsync(string id, InputModel model = null)
+    private async Task<ViewModel?> BuildViewModelAsync(string id, InputModel? model = null)
     {
         var request = await _interaction.GetLoginRequestByInternalIdAsync(id);
         if (request != null && request.Subject.GetSubjectId() == User.GetSubjectId())
         {
-            return CreateConsentViewModel(model, id, request);
+            return CreateConsentViewModel(model, request);
         }
         else
         {
@@ -132,7 +137,7 @@ public class Consent : PageModel
     }
 
     private ViewModel CreateConsentViewModel(
-        InputModel model, string id,
+        InputModel? model,
         BackchannelUserLoginRequest request)
     {
         var vm = new ViewModel
