@@ -2,6 +2,8 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using FamilyHubs.IdentityServerHost;
+using FamilyHubs.IdentityServerHost.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -15,7 +17,8 @@ internal static class HostingExtensions
         builder.Services.AddRazorPages();
 
         var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
-        const string connectionString = @"Data Source=Duende.IdentityServer.Quickstart.EntityFramework.db";
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        //const string connectionString = @"Data Source=Duende.IdentityServer.Quickstart.EntityFramework.db";
 
         //builder.Services.AddIdentityServer()
         //    .AddInMemoryIdentityResources(Config.IdentityResources)
@@ -23,7 +26,24 @@ internal static class HostingExtensions
         //    .AddInMemoryClients(Config.Clients)
         //    .AddTestUsers(TestUsers.Users);
 
-        builder.Services.AddIdentityServer()
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseSqlite(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly));
+        });
+
+        builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+        builder.Services.AddIdentityServer(options =>
+        {
+            options.Events.RaiseErrorEvents = true;
+            options.Events.RaiseInformationEvents = true;
+            options.Events.RaiseFailureEvents = true;
+            options.Events.RaiseSuccessEvents = true;
+
+            options.EmitStaticAudienceClaim = true;
+        })
         .AddConfigurationStore(options =>
         {
             options.ConfigureDbContext = b => b.UseSqlite(connectionString,
@@ -34,7 +54,8 @@ internal static class HostingExtensions
             options.ConfigureDbContext = b => b.UseSqlite(connectionString,
                 sql => sql.MigrationsAssembly(migrationsAssembly));
         })
-        .AddTestUsers(TestUsers.Users);
+        .AddAspNetIdentity<IdentityUser>();
+        //.AddTestUsers(TestUsers.Users);
 
         builder.Services.AddAuthentication()
             .AddGoogle("Google", options =>
@@ -66,7 +87,7 @@ internal static class HostingExtensions
     }
     
     public static WebApplication ConfigurePipeline(this WebApplication app)
-    { 
+    {
         app.UseSerilogRequestLogging();
         if (app.Environment.IsDevelopment())
         {
