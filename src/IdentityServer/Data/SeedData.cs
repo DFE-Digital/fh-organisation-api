@@ -12,10 +12,17 @@ namespace FamilyHubs.IdentityServerHost.Data;
 
 public class SeedData
 {
-    public static void EnsureSeedData(WebApplication app)
+    public static async Task EnsureSeedData(WebApplication app)
     {
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
+            var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+            if (roleManager != null)
+            {
+                await EnsureRoles(roleManager);
+            }
+            
+
             scope?.ServiceProvider?.GetService<PersistedGrantDbContext>()?.Database.Migrate();
 
             var context = scope?.ServiceProvider.GetService<ConfigurationDbContext>();
@@ -23,10 +30,32 @@ public class SeedData
             if (context != null && scope != null)
             {
                 EnsureSeedData(context);
-                EnsureUsers(scope);
-            }
-            
+                EnsureTestUsers(scope);
+                await EnsureUsers(scope);
+            } 
         }
+    }
+
+    private static async Task EnsureRoles(RoleManager<IdentityRole> roleManager)
+    {
+        if (!roleManager.Roles.Any())
+        {
+            Log.Debug("Roles being populated");
+            string[] roles = new string[] { "SysAdmin", "OrgAdmin", "SvcAdmin", "Pro" };
+            foreach (var role in roles)
+            {
+                IdentityResult result = await roleManager.CreateAsync(new IdentityRole(role));
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+            }     
+        }
+        else
+        {
+            Log.Debug("Roles already populated");
+        }
+
     }
 
     private static void EnsureSeedData(ConfigurationDbContext context)
@@ -109,7 +138,74 @@ public class SeedData
         }
     }
 
-    private static void EnsureUsers(IServiceScope scope)
+    private static async Task EnsureUsers(IServiceScope scope)
+    {
+
+        string[] OrgAdmins = new string[] { "BtlOrgAdmin", "LanOrgAdmin", "LbrOrgAdmin", "SalOrgAdmin", "SufOrgAdmin", "TowOrgAdmin" };
+        string[] SvcAdmins = new string[] { "BtlSvcAdmin", "LanSrvAdmin", "LbrSrvAdmin", "SalSrvAdmin", "SufSrvAdmin", "TowSrvAdmin" };
+        string[] Pro = new string[] { "BtlPro", "LanPro", "LbrPro", "SalPro", "SufPro", "TowPro" };
+        string[] Websites = new string[] { "https://www.bristol.gov.uk/", "https://www.lancashire.gov.uk/", "https://www.redbridge.gov.uk/", "https://www.salford.gov.uk/", "https://www.suffolk.gov.uk/", "https://www.towerhamlets.gov.uk/Home.aspx" };
+
+        var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        await AddUser(userMgr, "SysAdmin", "Pass123$", "SysAdmin", "www.warmhandover.gov.uk");
+        for(int i = 0; i < OrgAdmins.Length; i++)
+        {
+            await AddUser(userMgr, OrgAdmins[i], "Pass123$", "OrgAdmin", Websites[i]);
+        }
+        for (int i = 0; i < SvcAdmins.Length; i++)
+        {
+            await AddUser(userMgr, SvcAdmins[i], "Pass123$", "OrgAdmin", Websites[i]);
+        }
+        for (int i = 0; i < Pro.Length; i++)
+        {
+            await AddUser(userMgr, Pro[i], "Pass123$", "OrgAdmin", Websites[i]);
+        }
+    }
+
+    private static async Task AddUser(UserManager<IdentityUser> userMgr, string person, string password, string role, string website)
+    {
+        var user = userMgr.FindByNameAsync(person).Result;
+        if (user == null)
+        {
+            user = new IdentityUser
+            {
+                UserName = person,
+                Email = $"{person}@email.com",
+                EmailConfirmed = true,
+            };
+            var result = userMgr.CreateAsync(user, password).Result;
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
+            result = userMgr.AddClaimsAsync(user, new Claim[]
+            {
+        new Claim(JwtClaimTypes.Name, person),
+        new Claim(JwtClaimTypes.GivenName, person),
+        //new Claim(JwtClaimTypes.FamilyName, "Smith"),
+        new Claim(JwtClaimTypes.WebSite, "http://warmhandover.gov.uk"),
+            }).Result;
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
+            result = await userMgr.AddToRoleAsync(user, role);
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
+            Log.Debug($"{person} created");
+        }
+        else
+        {
+            Log.Debug($"{person} already exists");
+        }
+    }
+
+    private static void EnsureTestUsers(IServiceScope scope)
     {
         var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         var alice = userMgr.FindByNameAsync("alice").Result;
@@ -138,6 +234,8 @@ public class SeedData
             {
                 throw new Exception(result.Errors.First().Description);
             }
+
+            //result = userMgr.AddToRoleAsync
 
             Log.Debug("alice created");
         }

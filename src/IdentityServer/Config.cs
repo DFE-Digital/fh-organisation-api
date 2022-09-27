@@ -25,7 +25,9 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new List<ApiScope>
         { 
-            new ApiScope("api1", "MyAPI") 
+            new ApiScope("api1", "MyAPI"),
+            new ApiScope("servicedirectoryapi", "ServiceDirectoryApi"),
+            new ApiScope("referralapi", "ReferralApi")
         };
 
     public static IEnumerable<ApiResource> ApiResources =>
@@ -44,7 +46,7 @@ public static class Config
                 
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 // scopes that client has access to
-                AllowedScopes = { "api1" }
+                AllowedScopes = { "api1", "servicedirectoryapi", "referralapi" }
             },
             // interactive ASP.NET Core Web App
             new Client
@@ -66,7 +68,53 @@ public static class Config
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
-                    "api1"
+                    "api1", "servicedirectoryapi", "referralapi"
+                }
+            },
+
+            new Client
+            {
+                ClientId = "servicedirectory",
+                ClientSecrets = { new Secret("secret".Sha256()) },
+
+                AllowedGrantTypes = GrantTypes.Code,
+
+                // where to redirect after login
+                RedirectUris = { "https://localhost:5002/signin-oidc" },
+
+                // where to redirect after logout
+                PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                AllowOfflineAccess = true,
+
+                AllowedScopes = new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "servicedirectoryapi"
+                }
+            },
+
+            new Client
+            {
+                ClientId = "referral",
+                ClientSecrets = { new Secret("secret".Sha256()) },
+
+                AllowedGrantTypes = GrantTypes.Code,
+
+                // where to redirect after login
+                RedirectUris = { "https://localhost:5002/signin-oidc" },
+
+                // where to redirect after logout
+                PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                AllowOfflineAccess = true,
+
+                AllowedScopes = new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "referralapi"
                 }
             }
         };
