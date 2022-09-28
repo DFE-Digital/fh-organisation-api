@@ -41,7 +41,7 @@ public class SeedData
         if (!roleManager.Roles.Any())
         {
             Log.Debug("Roles being populated");
-            string[] roles = new string[] { "SysAdmin", "OrgAdmin", "SvcAdmin", "Pro" };
+            string[] roles = new string[] { "DfEAdmin", "LAAdmin", "VCSAdmin", "Pro" };
             foreach (var role in roles)
             {
                 IdentityResult result = await roleManager.CreateAsync(new IdentityRole(role));
@@ -141,24 +141,24 @@ public class SeedData
     private static async Task EnsureUsers(IServiceScope scope)
     {
 
-        string[] OrgAdmins = new string[] { "BtlOrgAdmin", "LanOrgAdmin", "LbrOrgAdmin", "SalOrgAdmin", "SufOrgAdmin", "TowOrgAdmin" };
-        string[] SvcAdmins = new string[] { "BtlSvcAdmin", "LanSrvAdmin", "LbrSrvAdmin", "SalSrvAdmin", "SufSrvAdmin", "TowSrvAdmin" };
+        string[] LAAdmins = new string[] { "BtlLAAdmin", "LanLAAdmin", "LbrLAAdmin", "SalLAAdmin", "SufLAAdmin", "TowLAAdmin" };
+        string[] SvcAdmins = new string[] { "BtlVCSAdmin", "LanVCSAdmin", "LbrVCSAdmin", "SalVCSAdmin", "SufVCSAdmin", "TowVCSAdmin" };
         string[] Pro = new string[] { "BtlPro", "LanPro", "LbrPro", "SalPro", "SufPro", "TowPro" };
         string[] Websites = new string[] { "https://www.bristol.gov.uk/", "https://www.lancashire.gov.uk/", "https://www.redbridge.gov.uk/", "https://www.salford.gov.uk/", "https://www.suffolk.gov.uk/", "https://www.towerhamlets.gov.uk/Home.aspx" };
 
         var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-        await AddUser(userMgr, "SysAdmin", "Pass123$", "SysAdmin", "www.warmhandover.gov.uk");
-        for(int i = 0; i < OrgAdmins.Length; i++)
+        await AddUser(userMgr, "DfEAdmin", "Pass123$", "DfEAdmin", "www.warmhandover.gov.uk");
+        for(int i = 0; i < LAAdmins.Length; i++)
         {
-            await AddUser(userMgr, OrgAdmins[i], "Pass123$", "OrgAdmin", Websites[i]);
+            await AddUser(userMgr, LAAdmins[i], "Pass123$", "LAAdmin", Websites[i]);
         }
         for (int i = 0; i < SvcAdmins.Length; i++)
         {
-            await AddUser(userMgr, SvcAdmins[i], "Pass123$", "OrgAdmin", Websites[i]);
+            await AddUser(userMgr, SvcAdmins[i], "Pass123$", "VCSAdmin", Websites[i]);
         }
         for (int i = 0; i < Pro.Length; i++)
         {
-            await AddUser(userMgr, Pro[i], "Pass123$", "OrgAdmin", Websites[i]);
+            await AddUser(userMgr, Pro[i], "Pass123$", "Pro", Websites[i]);
         }
     }
 
