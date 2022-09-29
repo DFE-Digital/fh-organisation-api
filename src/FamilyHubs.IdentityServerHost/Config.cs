@@ -48,10 +48,10 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.Code,
 
                 // where to redirect after login
-                RedirectUris = { "https://localhost:7216/signin-oidc" },
+                RedirectUris = { $"https://{Program.ServiceDirectoryUIUrl}/signin-oidc" },
 
                 // where to redirect after logout
-                PostLogoutRedirectUris = { "https://localhost:7216/signout-callback-oidc" },
+                PostLogoutRedirectUris = { $"https://{Program.ServiceDirectoryUIUrl}/signout-callback-oidc" },
 
                 AllowOfflineAccess = true,
 
@@ -71,10 +71,10 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.Code,
 
                 // where to redirect after login
-                RedirectUris = { "https://localhost:7270/signin-oidc" },
+                RedirectUris = { $"https://{Program.ReferralUIUrl}/signin-oidc" },
 
                 // where to redirect after logout
-                PostLogoutRedirectUris = { "https://localhost:7270/signout-callback-oidc" },
+                PostLogoutRedirectUris = { $"https://{Program.ReferralUIUrl}/signout-callback-oidc" },
 
                 AllowOfflineAccess = true,
 

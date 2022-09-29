@@ -1,6 +1,8 @@
 ﻿using FamilyHubs.IdentityServerHost;
 using FamilyHubs.IdentityServerHost.Persistence.Repository;
+using Microsoft.Extensions.Configuration;
 using Serilog;
+using System.Runtime.CompilerServices;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -16,6 +18,9 @@ try
         .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
         .Enrich.FromLogContext()
         .ReadFrom.Configuration(ctx.Configuration));
+
+    Program.ServiceDirectoryUIUrl = builder.Configuration.GetValue<string>("ReferralUIUrl");
+    Program.ReferralUIUrl = builder.Configuration.GetValue<string>("ServiceDirectoryUIUrl");
 
     var app = builder
 //#if USE_IN_MEMORY
@@ -47,4 +52,10 @@ finally
 {
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
+}
+
+public partial class Program
+{
+    public static string ServiceDirectoryUIUrl { get; set; } = default!;
+    public static string ReferralUIUrl { get; set; } = default!;
 }
