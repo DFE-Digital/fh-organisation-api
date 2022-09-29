@@ -1,4 +1,4 @@
-#define USE_IN_MEMORY
+//#define USE_IN_MEMORY
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;

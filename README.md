@@ -7,9 +7,9 @@ Migrations Commands
 
 dotnet add package Microsoft.EntityFrameworkCore.Design
 
-dotnet ef migrations add InitialIdentityServerMigration -c PersistedGrantDbContext --output-dir C:\Projects\FamilyHubs\fh-organisation-api\src\FamilyHubs.IdentityServerHost\Persistence\Data\
-dotnet ef migrations add InitialIdentityServerMigration -c ConfigurationDbContext --output-dir C:\Projects\FamilyHubs\fh-organisation-api\src\FamilyHubs.IdentityServerHost\Persistence\Data\
-dotnet ef migrations add InitialIdentityServerMigration -c ApplicationDbContext --output-dir C:\Projects\FamilyHubs\fh-organisation-api\src\FamilyHubs.IdentityServerHost\Persistence\Data\
+dotnet ef migrations add InitialGrantMigration -c PersistedGrantDbContext --output-dir C:\Projects\FamilyHubs\fh-organisation-api\src\FamilyHubs.IdentityServerHost\Persistence\Data\GrantMigrations
+dotnet ef migrations add InitialConfigurationMigration -c ConfigurationDbContext --output-dir C:\Projects\FamilyHubs\fh-organisation-api\src\FamilyHubs.IdentityServerHost\Persistence\Data\ConfigurationMigrations
+dotnet ef migrations add InitialIdentityMigration -c ApplicationDbContext --output-dir C:\Projects\FamilyHubs\fh-organisation-api\src\FamilyHubs.IdentityServerHost\Persistence\Data\IdentityMigrations
 
 dotnet ef database update -c PersistedGrantDbContext
 dotnet ef database update -c ConfigurationDbContext
